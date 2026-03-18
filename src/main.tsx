@@ -16,6 +16,7 @@ import { BillingPeriodProvider } from './context/BillingPeriodContext.tsx';
 import { RateProvider } from './context/RateContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { PaymentProvider } from './context/PaymentContext.tsx';
+import { NotificationProvider } from "./context/NotificationContext.tsx";
 
 
 createRoot(document.getElementById("root")!).render(
@@ -23,6 +24,7 @@ createRoot(document.getElementById("root")!).render(
      <ThemeProvider>
       <AuthProvider>
         <AppWrapper>
+          <NotificationProvider>
           <ZoneProvider>
             <VillageProvider>
               <UserProvider>
@@ -41,6 +43,7 @@ createRoot(document.getElementById("root")!).render(
               </UserProvider>
             </VillageProvider>
           </ZoneProvider>
+          </NotificationProvider>
         </AppWrapper>
       </AuthProvider>
     </ThemeProvider>

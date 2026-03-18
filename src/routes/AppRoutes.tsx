@@ -29,6 +29,7 @@ import {ProtectedRoute,AuthRoute} from "../pages/ProtectedRoute";
 import BillingPage from "../pages/BillingPages/BillingPage";
 import UnbilledPage from "../pages/BillingPages/UnbilledPage";
 import PaymentsPage from "../pages/PaymentPages/PaymentPage";
+import NotificationsPage from "../pages/NotificationPages/NotificationsPage";
 
 
 
@@ -78,6 +79,7 @@ const AppRoutes = () => {
             <Route path="/billings" element={<BillingPage />} />
             <Route path="/billings/unbilled" element={<UnbilledPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
 
 
 
