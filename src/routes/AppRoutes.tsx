@@ -25,11 +25,14 @@ import CustomerPage from "../pages/CustomerPages/CustomerPage";
 import CreateCustomer from "../pages/CustomerPages/CustomerCreate";
 import EditCustomer from "../pages/CustomerPages/CustomerEdit";
 import BulkCreateCustomer from "../pages/CustomerPages/BulkUploadPage";
-import {ProtectedRoute,AuthRoute} from "../pages/ProtectedRoute";
+import { ProtectedRoute, AuthRoute } from "../pages/ProtectedRoute";
 import BillingPage from "../pages/BillingPages/BillingPage";
 import UnbilledPage from "../pages/BillingPages/UnbilledPage";
 import PaymentsPage from "../pages/PaymentPages/PaymentPage";
 import NotificationsPage from "../pages/NotificationPages/NotificationsPage";
+import CreateNotification from "../pages/NotificationPages/CreateNotification";
+import VisitsPage from "../pages/VisitPages/VisitPage";
+import CreateVisitPage from "../pages/VisitPages/CreateVisit";
 
 
 
@@ -80,6 +83,14 @@ const AppRoutes = () => {
             <Route path="/billings/unbilled" element={<UnbilledPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/notifications/create" element={<CreateNotification />} />
+            <Route path="/visits" element={<VisitsPage />} />
+            <Route path="/visits/create" element={<CreateVisitPage />} />
+
+            <Route path="/visits/create/:customerId?" element={<CreateVisitPage />} />
+
+
+
 
 
 
@@ -91,8 +102,8 @@ const AppRoutes = () => {
         {/* AUTH PAGES */}
         <Route element={<AuthRoute />}>
 
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
 
         </Route>
 

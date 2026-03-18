@@ -1,19 +1,30 @@
+
 import { useEffect, useState } from "react";
 import { notificationService } from "../api/NotificationApi";
 import { useNotificationContext } from "../context/NotificationContext";
 
-export function useNotification(userId?: string) {
+interface Options {
+  page?: number;
+  limit?: number;
+}
+
+export function useNotification(userId?: string, options?: Options) {
 
   const {
     notifications,
     setNotifications,
     unreadCount,
-    setUnreadCount
+    setUnreadCount,
+    pagination,
+    setPagination
   } = useNotificationContext();
 
   const [loading, setLoading] = useState(false);
 
-  
+  const page = options?.page || 1;
+  const limit = options?.limit || 10;
+
+  // 📥 FETCH NOTIFICATIONS
   const fetchNotifications = async () => {
     if (!userId) return;
 
@@ -22,18 +33,19 @@ export function useNotification(userId?: string) {
 
       const res = await notificationService.getNotifications({
         userId,
-        page: 1,
-        limit: 10
+        page,
+        limit
       });
 
       setNotifications(res.data);
+      setPagination(res.pagination); // ✅ IMPORTANT
 
     } finally {
       setLoading(false);
     }
   };
 
-  
+  // 🔢 UNREAD COUNT
   const fetchUnreadCount = async () => {
     if (!userId) return;
 
@@ -41,7 +53,7 @@ export function useNotification(userId?: string) {
     setUnreadCount(res.data.unreadCount);
   };
 
- 
+  // ➕ CREATE
   const createNotification = async (data: {
     message: string;
     targetRoles: string[];
@@ -49,34 +61,26 @@ export function useNotification(userId?: string) {
 
     const res = await notificationService.createNotification(data);
 
-    
-    alert(res.message); 
-
     fetchNotifications();
     fetchUnreadCount();
 
     return res;
   };
 
-  
+  // ✅ MARK ONE
   const markAsRead = async (id: string) => {
-
     if (!userId) return;
 
     const res = await notificationService.markAsRead(id, userId);
 
-    
     fetchNotifications();
     fetchUnreadCount();
-
-    alert(res.message);
 
     return res;
   };
 
-  
+  // ✅ MARK ALL
   const markAllAsRead = async () => {
-
     if (!userId) return;
 
     const res = await notificationService.markAllAsRead(userId);
@@ -84,19 +88,18 @@ export function useNotification(userId?: string) {
     fetchNotifications();
     fetchUnreadCount();
 
-    alert(res.message);
-
     return res;
   };
 
   useEffect(() => {
     fetchNotifications();
     fetchUnreadCount();
-  }, [userId]);
+  }, [userId, page]); // ✅ page dependency
 
   return {
     notifications,
     unreadCount,
+    pagination,
     loading,
 
     createNotification,

@@ -13,7 +13,9 @@ import {
   ListIcon,
   PieChartIcon,
   UserCircleIcon,
-  DollarLineIcon
+  DollarLineIcon,
+  MailIcon,
+  TaskIcon
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -56,6 +58,12 @@ const navItems: NavItem[] = [
    
   },
    {
+    icon: <TaskIcon />,
+    name: "Visits",
+     path: "/visits",
+   
+  },
+   {
     icon: <BoxCubeIcon />,
     name: "Roles",
      path: "/roles",
@@ -83,6 +91,12 @@ const navItems: NavItem[] = [
     icon: <PieChartIcon />,
     name: "Rates",
      path: "/rates",
+   
+  },
+  {
+    icon: <MailIcon />,
+    name: "Create Notification",
+     path: "/notifications/create",
    
   },
   

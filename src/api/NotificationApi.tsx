@@ -54,7 +54,7 @@ async createNotification( data: {
  
   async markAsRead(id: string, userId: string){
 
-    const res = await api.post(`/notification/${id}/read`, { userId });
+    const res = await api.patch(`/notification/${id}/read`, { userId });
 
     return res.data;
 
@@ -63,7 +63,8 @@ async createNotification( data: {
  
   async markAllAsRead( userId: string){
 
-    const res = await api.post(`/notification/all/read`, { userId });
+    const res = await api.patch(`/notification/all/read`, { userId });
+console.log("res data",res.data);
 
     return res.data;
 

@@ -4,9 +4,7 @@ import "./index.css";
 import "swiper/swiper-bundle.css";
 import "flatpickr/dist/flatpickr.css";
 import App from "./App.tsx";
-
 import { ThemeProvider } from "./context/ThemeContext.tsx";
-
 import { AppWrapper } from './components/common/PageMeta.tsx';
 import { ZoneProvider } from './context/ZonesContext.tsx';
 import { VillageProvider } from './context/VillageContext.tsx';
@@ -17,6 +15,7 @@ import { RateProvider } from './context/RateContext.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import { PaymentProvider } from './context/PaymentContext.tsx';
 import { NotificationProvider } from "./context/NotificationContext.tsx";
+import { VisitProvider } from "./context/VisitContext.tsx";
 
 
 createRoot(document.getElementById("root")!).render(
@@ -28,7 +27,7 @@ createRoot(document.getElementById("root")!).render(
           <ZoneProvider>
             <VillageProvider>
               <UserProvider>
-
+                <VisitProvider>
                 <RoleProvider>
                   <RateProvider>
                     {/* <BillingContext> */}
@@ -40,6 +39,7 @@ createRoot(document.getElementById("root")!).render(
                     {/* </BillingContext> */}
                   </RateProvider>
                 </RoleProvider>
+                </VisitProvider>
               </UserProvider>
             </VillageProvider>
           </ZoneProvider>

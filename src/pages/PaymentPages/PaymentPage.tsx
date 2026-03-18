@@ -27,11 +27,7 @@ export default function PaymentsPage() {
 
 
   const { payments, pagination, loading, } = usePayments(filters
-    //     {
-    //     page,
-    //     limit: 10,
-    //     filters
-    //   }
+    
   );
 
   const { cancel, getPdf } = usePaymentActions();

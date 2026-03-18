@@ -18,6 +18,8 @@ import { Customer } from "../../../types/CustomerType";
 import { useState } from "react";
 import BillingRunModal from "../../customComponents/BillingModal";
 import { useBillingRun } from "../../../hooks/useBillingRun";
+import { VisitFilters } from "../../customComponents/VisitFilters";
+import { useVisit } from "../../../hooks/useVisit";
 
 
 function ZoneTable() {
@@ -844,6 +846,15 @@ function CustomersTable({ customers, loading }: Props) {
                         View
                       </Link>
 
+
+                      <Link
+                        to={`/visits/create/${customer._id}`}
+                         className="text-blue-600"
+                      >
+                         Visit
+                      </Link>
+
+
                       <Link
                         to={`/customers/edit/${customer._id}`}
                         className="text-blue-600"
@@ -880,11 +891,11 @@ interface Props2 {
   onBillAll: () => void;
   onBillZone: () => void;
   onBillVillage: () => void;
-  onPreviewPdf:()=>void;
+  onPreviewPdf: () => void;
 }
 
 
-function BillingsTable({ billings, loading ,onBillAll,onBillVillage,onBillZone,onPreviewPdf}: Props2) {
+function BillingsTable({ billings, loading, onBillAll, onBillVillage, onBillZone, onPreviewPdf }: Props2) {
 
   const [openRunModal, setOpenRunModal] = useState(false);
   const [runType, setRunType] = useState<"GLOBAL" | "ZONE" | "VILLAGE">("GLOBAL");
@@ -929,14 +940,14 @@ function BillingsTable({ billings, loading ,onBillAll,onBillVillage,onBillZone,o
       <div className="flex justify-end gap-3 mb-4">
         <div className="flex justify-end">
 
-        <button
-          onClick={onPreviewPdf}
-          className="px-4 py-2 bg-red-600 text-white rounded-lg"
-        >
-          Preview PDF
-        </button>
+          <button
+            onClick={onPreviewPdf}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg"
+          >
+            Preview PDF
+          </button>
 
-      </div>
+        </div>
 
         <button
           onClick={onBillAll}
@@ -959,13 +970,13 @@ function BillingsTable({ billings, loading ,onBillAll,onBillVillage,onBillZone,o
           Bill Village
         </button>
         <div className="flex justify-end mb-4">
-        <Link
-          to="/billings/unbilled"
-          className="px-4 py-2 text-white bg-blue-600 rounded-lg"
-        >
-          Unbilled
-        </Link>
-      </div>
+          <Link
+            to="/billings/unbilled"
+            className="px-4 py-2 text-white bg-blue-600 rounded-lg"
+          >
+            Unbilled
+          </Link>
+        </div>
 
       </div>
 
@@ -1073,7 +1084,7 @@ function BillingsTable({ billings, loading ,onBillAll,onBillVillage,onBillZone,o
   );
 }
 
- function UnbilledTable({ unbilled, loading, onPreviewPdf }: any) {
+function UnbilledTable({ unbilled, loading, onPreviewPdf }: any) {
 
   if (loading)
     return (
@@ -1178,11 +1189,11 @@ interface Props3 {
 
 }
 
- function PaymentsTable({
+function PaymentsTable({
   payments,
   loading,
   onCancel,
-  onPreviewPdf,onView
+  onPreviewPdf, onView
 }: Props3) {
 
   if (loading)
@@ -1256,11 +1267,10 @@ interface Props3 {
                   {/* AMOUNT */}
 
                   <td
-                    className={`font-medium ${
-                      payment.amountCents < 0
+                    className={`font-medium ${payment.amountCents < 0
                         ? "text-red-600"
                         : "text-green-600"
-                    }`}
+                      }`}
                   >
                     {payment.amountCents}
                   </td>
@@ -1273,13 +1283,12 @@ interface Props3 {
 
                   <td>
                     <span
-                      className={`text-sm font-medium ${
-                        payment.status === "ACTIVE"
+                      className={`text-sm font-medium ${payment.status === "ACTIVE"
                           ? "text-green-600"
                           : payment.status === "CANCELLED"
-                          ? "text-red-600"
-                          : "text-gray-600"
-                      }`}
+                            ? "text-red-600"
+                            : "text-gray-600"
+                        }`}
                     >
                       {payment.status}
                     </span>
@@ -1297,8 +1306,8 @@ interface Props3 {
 
                     <div className="flex gap-3">
 
-                     
-                       <button onClick={() => onView(payment._id)} className="text-green-600">Receipt</button>
+
+                      <button onClick={() => onView(payment._id)} className="text-green-600">Receipt</button>
 
                       {payment.status === "ACTIVE" && (
                         <button
@@ -1328,5 +1337,120 @@ interface Props3 {
     </>
   );
 }
+// ================= TABLE =================
+function VisitsTable() {
+  const { visits, loading, pagination, goToPage } = useVisit();
 
-export { ZoneTable, VillageTable, UsersTable, PeriodsTable, RolesTable, RatesTable, CustomersTable, BillingsTable,UnbilledTable ,PaymentsTable}
+  if (loading)
+    return (
+      <div className="flex justify-center py-10">
+        <div className="animate-spin h-8 w-8 border-b-2 border-brand-500 rounded-full"></div>
+      </div>
+    );
+
+  return (
+    <div className="space-y-4">
+      {/* ACTION BUTTONS */}
+
+      <div className="flex justify-end gap-3 mb-4">
+
+
+        <div className="flex justify-end mb-4">
+          <Link
+            to="/visits/create"
+            className="px-4 py-2 text-white bg-blue-600 rounded-lg"
+          >
+            New Visit
+          </Link>
+        </div>
+
+      </div>
+
+
+
+      <div className="overflow-hidden rounded-xl border bg-white">
+        <div className="max-w-full overflow-x-auto">
+          <table className="min-w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-5 py-3 text-left">Customer</th>
+                <th>Last</th>
+                <th>Current</th>
+                <th>Consumption</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {visits?.map((v: any) => {
+                const consumption = v.currentReading - v.lastReading;
+
+                return (
+                  <tr key={v._id} className="border-t">
+                    <td className="px-5 py-4">
+                      <div>
+                        <div className="font-medium">
+                          {v.customerId?.name}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {v.customerId?.customerCode}
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>{v.lastReading}</td>
+                    <td>{v.currentReading}</td>
+                    <td className="font-medium">{consumption}</td>
+
+                    <td>
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${v.isBilled
+                            ? "bg-green-100 text-green-600"
+                            : "bg-yellow-100 text-yellow-600"
+                          }`}
+                      >
+                        {v.isBilled ? "Billed" : "Unbilled"}
+                      </span>
+                    </td>
+
+                    <td>
+                      {new Date(v.visitedAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* PAGINATION */}
+      {pagination && (
+        <div className="flex justify-between items-center">
+          <button
+            disabled={pagination.page === 1}
+            onClick={() => goToPage(pagination.page - 1)}
+            className="px-3 py-1 border rounded"
+          >
+            Prev
+          </button>
+
+          <span>
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+
+          <button
+            disabled={!pagination.hasNextPage}
+            onClick={() => goToPage(pagination.page + 1)}
+            className="px-3 py-1 border rounded"
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export { ZoneTable, VillageTable, UsersTable, PeriodsTable, RolesTable, RatesTable, CustomersTable, BillingsTable, UnbilledTable, PaymentsTable, VisitsTable }

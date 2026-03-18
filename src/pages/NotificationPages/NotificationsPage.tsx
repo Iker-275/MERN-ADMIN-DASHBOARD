@@ -7,15 +7,19 @@ import NotificationViewModal from "../../components/customComponents/Notificatio
 export default function NotificationsPage() {
 
   const { user } = useAuth();
+  const [page, setPage] = useState(1);
 
-  const {
-    notifications,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    loading,
-    refresh
-  } = useNotification(user?._id);
+const {
+  notifications,
+  unreadCount,
+  pagination,
+  markAsRead,
+  markAllAsRead,
+  loading,
+  refresh
+} = useNotification(user?._id, { page, limit: 10 });
+
+
 
   const [selectedNotification, setSelectedNotification] = useState<any>(null);
 
@@ -113,7 +117,34 @@ export default function NotificationsPage() {
           refresh();
         }}
       />
+      <div className="flex justify-between items-center mt-4">
+
+  <span className="text-sm text-gray-500">
+    Page {pagination?.page} of {pagination?.totalPages}
+  </span>
+
+  <div className="flex gap-2">
+
+    <button
+      disabled={page === 1}
+      onClick={() => setPage(page - 1)}
+      className="px-3 py-1 border rounded disabled:opacity-50"
+    >
+      Prev
+    </button>
+
+    <button
+      disabled={!pagination?.hasNextPage}
+      onClick={() => setPage(page + 1)}
+      className="px-3 py-1 border rounded disabled:opacity-50"
+    >
+      Next
+    </button>
+
+  </div>
+</div>
 
     </div>
+    
   );
 }
