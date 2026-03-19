@@ -18,7 +18,6 @@ import { Customer } from "../../../types/CustomerType";
 import { useState } from "react";
 import BillingRunModal from "../../customComponents/BillingModal";
 import { useBillingRun } from "../../../hooks/useBillingRun";
-import { VisitFilters } from "../../customComponents/VisitFilters";
 import { useVisit } from "../../../hooks/useVisit";
 
 
