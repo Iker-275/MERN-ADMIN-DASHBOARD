@@ -1,40 +1,36 @@
+
+import PageMeta from "../../components/common/PageMeta";
+import { BillingSummary } from "../../components/customComponents/BillingSummary";
+import { RecentPayments, RecentVisits } from "../../components/customComponents/Recents";
 import EcommerceMetrics from "../../components/ecommerce/EcommerceMetrics";
-import MonthlySalesChart from "../../components/ecommerce/MonthlySalesChart";
-import StatisticsChart from "../../components/ecommerce/StatisticsChart";
-import MonthlyTarget from "../../components/ecommerce/MonthlyTarget";
-import RecentOrders from "../../components/ecommerce/RecentOrders";
-import DemographicCard from "../../components/ecommerce/DemographicCard";
-import PageMeta from "../../components/common/PageMeta"
+import BillingVsPaymentsChart from "../../components/ecommerce/StatisticsChart";
+import { useDashboard } from "../../hooks/useDashboard";
 
 export default function Home() {
-  
+  const { dashboard, loading } = useDashboard();
+
+  if (loading) return <div>Loading dashboard...</div>;
+
   return (
     <>
-      <PageMeta
-        title="Dashboard"
-        description="Your react Dashboard"
-      />
+      <PageMeta title="Dashboard" description="Galdogob Water Dashboard" />
+
       <div className="grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 space-y-6 xl:col-span-7">
-          <EcommerceMetrics />
-
-          <MonthlySalesChart />
+          <EcommerceMetrics data={dashboard} />
+          <BillingVsPaymentsChart data={dashboard} />
         </div>
 
         <div className="col-span-12 xl:col-span-5">
-          <MonthlyTarget />
+          <BillingSummary data={dashboard} />
         </div>
 
         <div className="col-span-12">
-          <StatisticsChart />
+          <RecentVisits visits={dashboard?.visits?.recent || []} />
         </div>
 
-        <div className="col-span-12 xl:col-span-5">
-          <DemographicCard />
-        </div>
-
-        <div className="col-span-12 xl:col-span-7">
-          <RecentOrders />
+        <div className="col-span-12">
+          <RecentPayments payments={dashboard?.payments?.recent || []} />
         </div>
       </div>
     </>

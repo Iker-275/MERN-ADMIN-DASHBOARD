@@ -16,33 +16,36 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import { PaymentProvider } from './context/PaymentContext.tsx';
 import { NotificationProvider } from "./context/NotificationContext.tsx";
 import { VisitProvider } from "./context/VisitContext.tsx";
+import { DashboardProvider } from "./context/DashboardContext.tsx";
 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-     <ThemeProvider>
+    <ThemeProvider>
       <AuthProvider>
         <AppWrapper>
           <NotificationProvider>
-          <ZoneProvider>
-            <VillageProvider>
-              <UserProvider>
-                <VisitProvider>
-                <RoleProvider>
-                  <RateProvider>
-                    {/* <BillingContext> */}
-                      <BillingPeriodProvider>
-                        <PaymentProvider>
-                          <App />
-                        </PaymentProvider>
-                      </BillingPeriodProvider>
-                    {/* </BillingContext> */}
-                  </RateProvider>
-                </RoleProvider>
-                </VisitProvider>
-              </UserProvider>
-            </VillageProvider>
-          </ZoneProvider>
+            <DashboardProvider>
+              <ZoneProvider>
+                <VillageProvider>
+                  <UserProvider>
+                    <VisitProvider>
+                      <RoleProvider>
+                        <RateProvider>
+                          {/* <BillingContext> */}
+                          <BillingPeriodProvider>
+                            <PaymentProvider>
+                              <App />
+                            </PaymentProvider>
+                          </BillingPeriodProvider>
+                          {/* </BillingContext> */}
+                        </RateProvider>
+                      </RoleProvider>
+                    </VisitProvider>
+                  </UserProvider>
+                </VillageProvider>
+              </ZoneProvider>
+            </DashboardProvider>
           </NotificationProvider>
         </AppWrapper>
       </AuthProvider>
