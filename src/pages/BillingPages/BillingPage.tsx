@@ -30,6 +30,7 @@ export default function BillingPage() {
     limit: 10,
     filters
   });
+  
   const previewPdf = async () => {
   
       const blob = await billingService.downloadBillingsReport(filters);

@@ -14,7 +14,7 @@ interface Props {
 export default function AuthForm({ mode }: Props) {
     const nav = useNavigate();
 
-    const { loginUser, signupUser,} = useAuth();
+    const { loginUser, signupUser,loading} = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -60,7 +60,7 @@ export default function AuthForm({ mode }: Props) {
 
                         <p className="text-sm text-gray-500 dark:text-gray-400">
 
-                            {isSignup
+                            {loading ? "Please wait..":isSignup
                                 ? "Create your account"
                                 : "Enter your credentials to continue"}
 

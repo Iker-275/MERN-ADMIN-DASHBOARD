@@ -18,7 +18,7 @@ export function useBillings(
    setLoading(true)
 
    const res = await billingService.getBillings(filters);
-   console.log("filters applied",filters);
+   
    
 
    setBillings(res.data);

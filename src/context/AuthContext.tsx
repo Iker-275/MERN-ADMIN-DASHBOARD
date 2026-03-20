@@ -17,8 +17,8 @@ interface AuthContextType {
   login: (token: string, user: User) => void;
   logout: () => void;
   loading: boolean;
-  loginUser:(email:string,password:string)=>void;
-  signupUser:(email:string,password:string)=>void;
+  loginUser: (email: string, password: string) => Promise<void>;
+  signupUser:(email:string,password:string)=>Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -49,29 +49,33 @@ export function AuthProvider({ children }: any) {
   // LOGOUT
   // =========================
   const logout = () => {
+    setLoading(true)
 
     localStorage.removeItem("token");
 
     setUser(null);
     setToken(null);
-
+setLoading(false)
   };
   
 
 const loginUser = async (email: string, password: string) => {
+  setLoading(true)
   const res = await authService.login(email, password);
-  console.log("response",res);
+  
 
   login(res.token, res.user);
    if(res.token){
     alert("Success")
     
   }
+  setLoading(false)
 };
 
 const signupUser = async (email: string, password: string) => {
+  setLoading(true)
   const res = await authService.signup(email, password);
-  console.log("response",res);
+  
   
 
   login(res.token, res.user);
@@ -79,6 +83,22 @@ const signupUser = async (email: string, password: string) => {
     alert("Success")
     
 
+  }
+  setLoading(false)
+};
+
+const getUserFromToken = (token: string): User | null => {
+  try {
+    const decoded: any = jwtDecode(token);
+
+    return {
+      _id: decoded.id,
+      email: decoded.email,
+      role: decoded.role,
+      active: decoded.active,
+    };
+  } catch {
+    return null;
   }
 };
 
@@ -101,6 +121,13 @@ const signupUser = async (email: string, password: string) => {
       if (Date.now() > expiry) {
         logout();
       } else {
+        
+      // ✅ RESTORE USER HERE
+      const restoredUser = getUserFromToken(token);
+      setUser(restoredUser);
+
+     
+      
 
         const timeout = expiry - Date.now();
 

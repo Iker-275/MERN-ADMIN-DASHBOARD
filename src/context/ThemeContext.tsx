@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       } else {
         document.documentElement.classList.remove("dark");
       }
-      console.log("Theme:", theme);
+      
 
     }
   }, [theme, isInitialized]);
