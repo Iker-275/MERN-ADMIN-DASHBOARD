@@ -1,9 +1,11 @@
 import { CustomerFilters } from "../../types/CustomerType";
 import { useState, useEffect } from "react";
 
+
 interface Props {
   filters: CustomerFilters;
   setFilters: (filters: CustomerFilters) => void;
+  onClear: () => void;
 }
 
 
@@ -17,7 +19,7 @@ interface Props {
   setFilters: (filters: CustomerFilters) => void;
 }
 
-export default function CustomersFilters({ filters, setFilters }: Props) {
+export default function CustomersFilters({ filters, setFilters ,onClear}: Props) {
 
   const [search, setSearch] = useState(filters.name || "");
 
@@ -144,6 +146,22 @@ export default function CustomersFilters({ filters, setFilters }: Props) {
           <option value="true">Has Balance</option>
           <option value="false">No Balance</option>
         </select>
+
+        <button
+    onClick={onClear}
+    className="
+      px-4 py-2 
+      text-sm 
+      font-medium 
+      text-gray-600 
+      bg-gray-100 
+      rounded-lg 
+      hover:bg-gray-200 
+      transition
+    "
+  >
+    Clear Filters
+  </button>
 
       </div>
 

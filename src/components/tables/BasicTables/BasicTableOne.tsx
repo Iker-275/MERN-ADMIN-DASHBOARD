@@ -19,6 +19,8 @@ import { useState } from "react";
 import BillingRunModal from "../../customComponents/BillingModal";
 import { useBillingRun } from "../../../hooks/useBillingRun";
 import { useVisit } from "../../../hooks/useVisit";
+import { usePaymentActions } from "../../../hooks/usePaymentActions";
+import { useAuth } from "../../../hooks/useAuth";
 
 
 function ZoneTable() {
@@ -710,12 +712,60 @@ interface Props {
   customers: Customer[];
   loading: boolean;
   onPreviewPdf: () => void;
+  selectedIds: Set<string>;
+  setSelectedIds: React.Dispatch<React.SetStateAction<Set<string>>>;
 }
 
 
 
 
-function CustomersTable({ customers, loading,onPreviewPdf }: Props) {
+function CustomersTable({ customers, loading, onPreviewPdf }: Props) {
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const newSet = new Set(prev);
+      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+      return newSet;
+    });
+  };
+
+  const selectAllCurrentPage = () => {
+    setSelectedIds(prev => {
+      const newSet = new Set(prev);
+      customers.forEach(c => newSet.add(c._id));
+      return newSet;
+    });
+  };
+
+  const deselectAllCurrentPage = () => {
+    setSelectedIds(prev => {
+      const newSet = new Set(prev);
+      customers.forEach(c => newSet.delete(c._id));
+      return newSet;
+    });
+  };
+
+  const isAllSelected = customers.every(c => selectedIds.has(c._id));
+  const { bulkClear } = usePaymentActions();
+  const { user } = useAuth();
+
+  const handleBulkClear = async () => {
+    try {
+      const res = await bulkClear({
+        method: "ACCOUNT",
+        userId: user?._id,
+        customerIds: Array.from(selectedIds)
+      });
+
+      alert(res.message || "Bulk payment successful");
+
+      setSelectedIds(new Set()); // reset selection
+    } catch (err: any) {
+      alert(err.message || "Bulk action failed");
+    }
+  };
+
+
 
   if (loading)
     return (
@@ -726,8 +776,38 @@ function CustomersTable({ customers, loading,onPreviewPdf }: Props) {
 
   return (
     <>
+
+
+      {selectedIds.size > 0 && (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm">
+
+          {/* Left: Selection Info */}
+          <div className="text-sm text-gray-700">
+            <span className="font-semibold">{selectedIds.size}</span> customers selected
+          </div>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-2">
+
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              className="px-3 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+            >
+              Reset
+            </button>
+
+            <button
+              onClick={handleBulkClear}
+              className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition"
+            >
+              Clear Payments
+            </button>
+
+          </div>
+        </div>
+      )}
       <div className="flex items-center justify-end gap-3 mb-6">
-      <div className="flex justify-end">
+        <div className="flex justify-end">
 
           <button
             onClick={onPreviewPdf}
@@ -765,6 +845,20 @@ function CustomersTable({ customers, loading,onPreviewPdf }: Props) {
 
               <TableRow>
 
+                <TableCell isHeader className="w-10 px-3 py-2">
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    onChange={(e) =>
+                      e.target.checked
+                        ? selectAllCurrentPage()
+                        : deselectAllCurrentPage()
+                    }
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 
+               focus:ring-2 focus:ring-blue-500 
+               cursor-pointer"
+                  />
+                </TableCell>
                 <TableCell isHeader>Customer</TableCell>
                 <TableCell isHeader>Phone</TableCell>
                 <TableCell isHeader>Village</TableCell>
@@ -783,6 +877,26 @@ function CustomersTable({ customers, loading,onPreviewPdf }: Props) {
               {customers?.map((customer) => (
 
                 <TableRow key={customer._id}>
+
+                  <TableCell>
+                    <div className="flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(customer._id)}
+                        onChange={() => toggleSelect(customer._id)}
+                        className="
+        h-4 w-4 
+        rounded 
+        border-gray-300 
+        text-blue-600 
+        focus:ring-2 
+        focus:ring-blue-500 
+        cursor-pointer
+        transition
+      "
+                      />
+                    </div>
+                  </TableCell>
 
                   <TableCell className="px-5 py-4">
 
@@ -859,9 +973,9 @@ function CustomersTable({ customers, loading,onPreviewPdf }: Props) {
 
                       <Link
                         to={`/visits/create/${customer._id}`}
-                         className="text-blue-600"
+                        className="text-blue-600"
                       >
-                         Visit
+                        Visit
                       </Link>
 
 
@@ -1278,8 +1392,8 @@ function PaymentsTable({
 
                   <td
                     className={`font-medium ${payment.amountCents < 0
-                        ? "text-red-600"
-                        : "text-green-600"
+                      ? "text-red-600"
+                      : "text-green-600"
                       }`}
                   >
                     {payment.amountCents}
@@ -1294,10 +1408,10 @@ function PaymentsTable({
                   <td>
                     <span
                       className={`text-sm font-medium ${payment.status === "ACTIVE"
-                          ? "text-green-600"
-                          : payment.status === "CANCELLED"
-                            ? "text-red-600"
-                            : "text-gray-600"
+                        ? "text-green-600"
+                        : payment.status === "CANCELLED"
+                          ? "text-red-600"
+                          : "text-gray-600"
                         }`}
                     >
                       {payment.status}
@@ -1416,8 +1530,8 @@ function VisitsTable() {
                     <td>
                       <span
                         className={`px-2 py-1 rounded text-xs ${v.isBilled
-                            ? "bg-green-100 text-green-600"
-                            : "bg-yellow-100 text-yellow-600"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-yellow-100 text-yellow-600"
                           }`}
                       >
                         {v.isBilled ? "Billed" : "Unbilled"}

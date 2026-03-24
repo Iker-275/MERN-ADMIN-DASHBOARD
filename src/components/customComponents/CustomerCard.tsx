@@ -197,22 +197,6 @@ export default function CustomerInfoCard() {
           />
 
         </div>
-        {/* <button
-          onClick={() => setIsPaymentModalOpen(true)}
-          className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg"
-        >
-          Make Payment
-        </button>
-
-         <button
-          onClick={() => {
-          setRunType("MANUAL");
-          setOpenRunModal(true);
-        }}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg"
-        >
-          Bill Customer
-        </button> */}
         <div className="mt-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-start">
 
           <button

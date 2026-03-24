@@ -9,7 +9,7 @@ import PdfPreviewModal from "../../components/customComponents/PDFPreview";
 
 
 export default function CustomersPage() {
-
+const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
 
@@ -39,14 +39,22 @@ const previewPdf = async () => {
 
   };
 
+  const handleClearFilters = () => {
+  setFilters({});
+  setPage(1);
+  setSelectedIds(new Set()); // optional but smart for bulk actions
+};
+
   return (
     <div className="space-y-6">
 
       <CustomersFilters
+      onClear={handleClearFilters}
         filters={filters}
         setFilters={(f) => {
           setPage(1); // reset page when filters change
           setFilters(f);
+          
         }}
       />
 
@@ -54,6 +62,8 @@ const previewPdf = async () => {
         customers={customers}
         loading={loading}
         onPreviewPdf={previewPdf}
+        selectedIds={selectedIds}
+  setSelectedIds={setSelectedIds}
       />
        <PdfPreviewModal
               open={pdfOpen}
