@@ -6,7 +6,7 @@ import { useZones } from "../../hooks/useZone";
 import { useVillage } from "../../hooks/useVillage";
 interface Props {
     open: boolean;
-    runType: "GLOBAL" | "ZONE" | "VILLAGE";
+    runType: "GLOBAL" | "ZONE" | "VILLAGE" | "MANUAL";
     onClose: () => void;
     onRun: (data: any) => Promise<any>;
 }
@@ -198,6 +198,7 @@ export default function BillingRunModal({
                         Running billing...
                     </div>
                 )}
+               
 
                 {result && (
 

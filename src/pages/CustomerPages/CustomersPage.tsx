@@ -2,60 +2,8 @@ import { useCustomers } from "../../hooks/useCustomers";
 import {CustomersTable} from "../../components/tables/BasicTables/BasicTableOne";
 import CustomersFilters from "../../components/customComponents/CustomerFilters";
 import { useState } from "react";
-
-
-// export default function CustomersPage() {
-
-//   const {
-//     customers,
-//     pagination,
-//     loading,
-//     filters,
-//     setFilters,
-//     page,
-//     setPage
-//   } = useCustomers();
-
-//   return (
-//     <div className="space-y-6">
-
-//       <CustomersFilters
-//         filters={filters}
-//         setFilters={setFilters}
-//       />
-
-//       <CustomersTable
-//         customers={customers}
-//         loading={loading}
-//       />
-
-//       {pagination && (
-//         <div className="flex justify-end gap-2">
-
-//           <button
-//             disabled={!pagination.hasNextPage && page === 1}
-//             onClick={() => setPage(page - 1)}
-//           >
-//             Prev
-//           </button>
-
-//           <span>
-//             Page {pagination.page} / {pagination.totalPages}
-//           </span>
-
-//           <button
-//             disabled={!pagination.hasNextPage}
-//             onClick={() => setPage(page + 1)}
-//           >
-//             Next
-//           </button>
-
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
+import { customerService } from "../../api/CustomerApi";
+import PdfPreviewModal from "../../components/customComponents/PDFPreview";
 
 
 
@@ -65,10 +13,14 @@ export default function CustomersPage() {
   const [filters, setFilters] = useState({});
   const [page, setPage] = useState(1);
 
+  const [pdfOpen, setPdfOpen] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState("");
+
   const {
     customers,
     pagination,
     loading,
+    
   } = useCustomers(
     {
     page,
@@ -76,6 +28,16 @@ export default function CustomersPage() {
     filters
   }
 );
+const previewPdf = async () => {
+
+    const blob = await customerService.downloadCustomersReport(filters);
+
+    const url = URL.createObjectURL(blob);
+
+    setPdfUrl(url);
+    setPdfOpen(true);
+
+  };
 
   return (
     <div className="space-y-6">
@@ -91,7 +53,13 @@ export default function CustomersPage() {
       <CustomersTable
         customers={customers}
         loading={loading}
+        onPreviewPdf={previewPdf}
       />
+       <PdfPreviewModal
+              open={pdfOpen}
+              url={pdfUrl}
+              onClose={() => setPdfOpen(false)}
+            />
 
       {pagination && (
         <div className="flex items-center justify-between mt-4">

@@ -35,7 +35,7 @@ export function useBillingRun(){
 
  }
 
- const manualBill = async(customerId:string,payload:any)=>{
+ const manualBill = async(customerId:any,payload:any)=>{
 
   const res = await billingService.manualBillCustomer(customerId,payload)
 
