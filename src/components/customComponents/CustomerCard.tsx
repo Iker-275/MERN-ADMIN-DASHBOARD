@@ -3,15 +3,12 @@ import { useCustomer } from "../../hooks/useCustomer";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
 import CustomerForm from "../customforms/CustomerForm";
-import { useEffect, useState } from "react";
-import { usePayments } from "../../hooks/usePayment";
-import { useBillings } from "../../hooks/useBillings";
-import { useVisit } from "../../hooks/useVisit";
 import { usePaymentActions } from "../../hooks/usePaymentActions";
 import { useAuth } from "../../hooks/useAuth";
 import { CustomerBillings, CustomerPayments, CustomerVisits } from "./CustomerAdditionalInfo";
 import BillingRunModal from "./BillingModal";
 import { useBillingRun } from "../../hooks/useBillingRun";
+import { useState } from "react";
 
 export default function CustomerInfoCard() {
 
