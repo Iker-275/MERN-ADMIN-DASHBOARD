@@ -8,7 +8,7 @@ export const authService = {
       email,
       password
     });
-
+   
     return res.data;
 
   },

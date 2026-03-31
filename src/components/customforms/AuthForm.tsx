@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
@@ -12,9 +12,9 @@ interface Props {
 }
 
 export default function AuthForm({ mode }: Props) {
-    const nav = useNavigate();
 
     const { loginUser, signupUser,loading} = useAuth();
+    const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -23,32 +23,70 @@ export default function AuthForm({ mode }: Props) {
     const [isChecked, setIsChecked] = useState(false);
 
     const isSignup = mode === "signup";
+    const validate = () => {
+        const newErrors: any = {};
+
+        if (!email) newErrors.email = "Email is required";
+        if (!password) newErrors.password = "Password is required";
+        if (password.length < 6) newErrors.password = "Minimum 6 characters";
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        setErrors({});
         e.preventDefault();
 
+        if (!validate()) return;
         try {
-
             if (isSignup) {
                  await signupUser(email, password);
+
             } else {
                  await loginUser(email, password);
 
             }
-              nav("/")
 
         } catch (err) {
+           
             console.log(err);
+            const error = err as { email?: string; password?: string; message?: string };
+            setErrors({ email: error.email, password: error.password, general: error.message || "Something went wrong" });
         }
     };
+
+   
 
     return (
 
         <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2">
+            {loading && (
+                <div className="flex justify-center py-10">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
+                </div>
+            )}
 
             <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
 
                 <div>
+                    {errors.general && (
+                        <div className="mb-4 text-sm text-red-500">
+                            {errors.general}
+                        </div>
+                    )}
+                    {errors.email && (
+                        <div className="mb-4 text-sm text-red-500">
+                            {errors.email}
+                        </div>
+                    )}
+                    {errors.password && (
+                        <div className="mb-4 text-sm text-red-500">
+                            {errors.password}
+                        </div>
+                    )}
+                    
 
                     <div className="mb-6">
 
@@ -60,7 +98,7 @@ export default function AuthForm({ mode }: Props) {
 
                         <p className="text-sm text-gray-500 dark:text-gray-400">
 
-                            {loading ? "Please wait..":isSignup
+                            {isSignup
                                 ? "Create your account"
                                 : "Enter your credentials to continue"}
 
@@ -76,13 +114,15 @@ export default function AuthForm({ mode }: Props) {
 
                             <div>
                                 <Label>Email</Label>
-
                                 <Input
                                     type="email"
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={(e: any) => setEmail(e.target.value)}
+                                    error={!!errors.email}
+                                    hint={errors.email}
                                 />
+
 
                             </div>
 
@@ -99,6 +139,8 @@ export default function AuthForm({ mode }: Props) {
                                         placeholder="Enter password"
                                         value={password}
                                         onChange={(e: any) => setPassword(e.target.value)}
+                                        error={!!errors.password}
+                                        hint={errors.password}
                                     />
 
                                     <span
@@ -165,7 +207,7 @@ export default function AuthForm({ mode }: Props) {
 
                             <Button variant="outline" className="w-full" size="sm">
 
-                                {isSignup ? "Create Account" : "Sign In"}
+                                {loading ? (isSignup ? "Creating Account..." : "Signing In...") : (isSignup ? "Create Account" : "Sign In")}
 
                             </Button>
 

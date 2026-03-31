@@ -4,6 +4,7 @@ import api from "../api/api";
 import { authService } from "../api/AuthApi";
 
 
+
 interface User {
   _id: string;
   email: string;
@@ -19,6 +20,8 @@ interface AuthContextType {
   loading: boolean;
   loginUser: (email: string, password: string) => Promise<void>;
   signupUser:(email:string,password:string)=>Promise<void>;
+ 
+
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -59,34 +62,49 @@ setLoading(false)
   };
   
 
-const loginUser = async (email: string, password: string) => {
-  setLoading(true)
-  const res = await authService.login(email, password);
-  
 
-  login(res.token, res.user);
-   if(res.token){
-    alert("Success")
+const loginUser = async (email: string, password: string) => {
+  setLoading(true);
+
+  try {
+    const res = await authService.login(email, password);
+
+    if (!res.success) {
+      throw res.data.errors || { message: "Login failed" };
+      
+    }
     
+    login(res.token, res.user);
+    return res; 
+
+  } catch (err: any) {
+    
+    throw err; 
+  } finally {
+    setLoading(false);
   }
-  setLoading(false)
 };
 
 const signupUser = async (email: string, password: string) => {
-  setLoading(true)
-  const res = await authService.signup(email, password);
-  
-  
+  setLoading(true);
 
-  login(res.token, res.user);
-  if(res.token){
-    alert("Success")
-    
+  try {
+    const res = await authService.signup(email, password);
 
+    if (!res.success) {
+      throw res.errors || { message: "Signup failed" };
+      
+    }
+
+    login(res.token, res.user);
+    return res;
+
+  } catch (err: any) {
+    throw err;
+  } finally {
+    setLoading(false);
   }
-  setLoading(false)
 };
-
 const getUserFromToken = (token: string): User | null => {
   try {
     const decoded: any = jwtDecode(token);
@@ -156,7 +174,9 @@ const getUserFromToken = (token: string): User | null => {
     <AuthContext.Provider
       value={{
         user,
+       
         token,
+         
         login,
         logout,
         loading,
