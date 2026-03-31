@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, } from "react-router-dom";
 import { useCustomer } from "../../hooks/useCustomer";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
