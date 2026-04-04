@@ -16,7 +16,7 @@ export const usePayments = (params: any) => {
 
   useEffect(() => {
     fetchPayments(params);
-  }, [JSON.stringify(params)]);
+  }, [params.page,JSON.stringify(params)]);
 
   return {
     payments,

@@ -77,14 +77,21 @@ export default function BillingPage() {
 
       {/* FILTERS */}
 
-      <BillingFilters
+      {/* <BillingFilters
         filters={filters}
         setFilters={setFilters}
         // setFilters={(f) => {
         //    setPage(1);
         //   setFilters(f);
         // }}
-      />
+      /> */}
+      <BillingFilters
+  filters={filters}
+  setFilters={(newFilters) => {
+    setPage(1); // 🔥 CRITICAL FIX
+    setFilters(newFilters);
+  }}
+/>
 
        {/* RUN MODAL */}
 
@@ -138,7 +145,8 @@ export default function BillingPage() {
 
             <button
               disabled={pagination.page === 1}
-              onClick={() => setPage(page - 1)}
+              onClick={() => setPage((p) => p - 1)}
+              // onClick={() => setPage(page - 1)}
               className="px-3 py-1 border rounded"
             >
               Prev
@@ -146,7 +154,8 @@ export default function BillingPage() {
 
             <button
               disabled={!pagination.hasNextPage}
-              onClick={() => setPage(page + 1)}
+              onClick={() => setPage((p) => p + 1)}
+              // onClick={() => setPage(page + 1)}
               className="px-3 py-1 border rounded"
             >
               Next

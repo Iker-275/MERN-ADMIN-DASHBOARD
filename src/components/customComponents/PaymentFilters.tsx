@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Select, { SelectOption } from "../customComponents/DropDowns";
 
 import { useZones } from "../../hooks/useZone";
 import { useVillage } from "../../hooks/useVillage";
+import { useCustomers } from "../../hooks/useCustomers";
 
 interface Props {
   filters: any;
@@ -11,21 +12,22 @@ interface Props {
 
 export default function PaymentFilters({ filters, setFilters }: Props) {
 
-  const [search, setSearch] = useState("");
 
   const { zones } = useZones();
   const { villages } = useVillage();
+    const { customers } = useCustomers({});
+  
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setFilters({
-        ...filters,
-        customerName: search
-      });
-    }, 500);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setFilters({
+  //       ...filters,
+        
+  //     });
+  //   }, 500);
 
-    return () => clearTimeout(timer);
-  }, [search]);
+  //   return () => clearTimeout(timer);
+  // }, [filters]);
 
   const zoneOptions: SelectOption[] =
     zones?.map((z: any) => ({
@@ -43,20 +45,31 @@ export default function PaymentFilters({ filters, setFilters }: Props) {
       value: v._id,
       label: v.name
     }));
+     const customerOptions =
+    customers?.map((c: any) => ({
+      value: c._id,
+      label: `${c.name} (${c.customerCode})`
+    })) || [];
 
   return (
 
     <div className="flex flex-wrap gap-4 items-center">
 
       {/* SEARCH */}
+      <div className="w-60">
+        <Select
+          options={customerOptions}
+          placeholder="Customer"
+          defaultValue={filters.customerId}
+          onChange={(value) => setFilters({
+              ...filters,
+              customerId: value,
+              // villageId: undefined
+            })}
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Search customer..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="border rounded-lg px-3 py-2 w-60"
-      />
+      
 
       {/* ZONE */}
 
@@ -147,6 +160,15 @@ export default function PaymentFilters({ filters, setFilters }: Props) {
         }
         className="border rounded-lg px-3 py-2"
       />
+
+       <button
+          onClick={() => {
+            setFilters({});
+          }}
+          className="px-3 py-2 bg-gray-200 rounded-lg"
+        >
+          Reset
+        </button>
 
     </div>
 

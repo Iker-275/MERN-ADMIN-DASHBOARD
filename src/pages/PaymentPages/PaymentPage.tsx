@@ -26,10 +26,14 @@ export default function PaymentsPage() {
   const [receiptOpen, setReceiptOpen] = useState(false);
 
 
-  const { payments, pagination, loading, } = usePayments(filters
+  // const { payments, pagination, loading, } = usePayments(filters
     
-  );
-
+  // );
+const { payments, pagination, loading } = usePayments({
+  page,
+  limit: 10,
+  ...filters
+});
   const { cancel, getPdf } = usePaymentActions();
   const { user } = useAuth();
 
@@ -64,14 +68,18 @@ export default function PaymentsPage() {
 
       {/* FILTERS */}
 
-      <PaymentFilters
+      {/* <PaymentFilters
         filters={filters}
         setFilters={setFilters}
-      // setFilters={(f) => {
-      // //   setPage(1);
-      //   setFilters(f);
-      // }}
-      />
+      
+      /> */}
+      <PaymentFilters
+  filters={filters}
+  setFilters={(newFilters) => {
+    setPage(1); // 🔥 critical
+    setFilters(newFilters);
+  }}
+/>
 
       {/* TABLE */}
 
@@ -126,7 +134,8 @@ export default function PaymentsPage() {
 
             <button
               disabled={pagination.page === 1}
-              onClick={() => setPage(page - 1)}
+              onClick={() => setPage((p) => p - 1)}
+              // onClick={() => setPage(page - 1)}
               className="px-3 py-1 border rounded"
             >
               Prev
@@ -134,7 +143,8 @@ export default function PaymentsPage() {
 
             <button
               disabled={!pagination.hasNextPage}
-              onClick={() => setPage(page + 1)}
+              onClick={() => setPage((p) => p + 1)}
+              // onClick={() => setPage(page + 1)}
               className="px-3 py-1 border rounded"
             >
               Next

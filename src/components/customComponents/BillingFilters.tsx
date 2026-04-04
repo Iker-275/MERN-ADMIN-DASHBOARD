@@ -22,15 +22,25 @@ export default function BillingFilters({ filters, setFilters }: Props) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setFilters
-      // setFilters({
-      //   ...filters,
-      //   customerName: search
-      // });
+      setFilters({
+        ...filters,
+        customerName: search
+      });
     }, 500);
 
     return () => clearTimeout(timer);
   }, [search]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setFilters
+  //     // setFilters({
+  //     //   ...filters,
+  //     //   customerName: search
+  //     // });
+  //   }, 500);
+
+  //   return () => clearTimeout(timer);
+  // }, [search]);
 
   const periodOptions: SelectOption[] =
     periods?.map((p: any) => ({
@@ -130,6 +140,74 @@ export default function BillingFilters({ filters, setFilters }: Props) {
           <option value="PAID">Paid</option>
           <option value="REVERSED">Reversed</option>
         </select>
+
+        <input
+          type="number"
+          placeholder="Min Amount"
+          className="border rounded-lg px-3 py-2 w-40"
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              minAmount: Number(e.target.value)
+            })
+          }
+        />
+
+        <input
+          type="number"
+          placeholder="Max Amount"
+          className="border rounded-lg px-3 py-2 w-40"
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              maxAmount: Number(e.target.value)
+            })
+          }
+        />
+
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            onChange={(e) =>
+              setFilters({
+                ...filters,
+                unpaidOnly: e.target.checked
+              })
+            }
+          />
+          Unpaid Only
+        </label>
+
+        <input
+          type="date"
+          className="border rounded-lg px-3 py-2"
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              dateFrom: e.target.value
+            })
+          }
+        />
+
+        <input
+          type="date"
+          className="border rounded-lg px-3 py-2"
+          onChange={(e) =>
+            setFilters({
+              ...filters,
+              dateTo: e.target.value
+            })
+          }
+        />
+
+        <button
+          onClick={() => {
+            setFilters({});
+          }}
+          className="px-3 py-2 bg-gray-200 rounded-lg"
+        >
+          Reset
+        </button>
 
       </div>
     </div>

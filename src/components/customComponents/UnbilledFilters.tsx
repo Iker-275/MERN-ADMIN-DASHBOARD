@@ -79,6 +79,15 @@ export default function UnbilledFilters({ filters, setFilters }: any) {
 
       </div>
 
+       <button
+          onClick={() => {
+            setFilters({});
+          }}
+          className="px-3 py-2 bg-gray-200 rounded-lg"
+        >
+          Reset
+        </button>
+
     </div>
 
   );
