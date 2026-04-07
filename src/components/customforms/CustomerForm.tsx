@@ -232,6 +232,32 @@ export default function CustomerForm({
 
       </div>
 
+      {/* BALANCE */}
+      <div className="border-t pt-5">
+
+        <h4 className="font-semibold mb-4">
+          Balance Information
+        </h4>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          <div>
+            <Label>Previous Balance</Label>
+            <Input
+              type="number"
+              value={form.previousBalance}
+              onChange={(e) =>
+                handleMeterChange("previousBalance", Number(e.target.value))
+              }
+            />
+          </div>
+
+         
+
+        </div>
+
+      </div>
+
       {/* Actions */}
 
       <div className="flex gap-3 pt-4">

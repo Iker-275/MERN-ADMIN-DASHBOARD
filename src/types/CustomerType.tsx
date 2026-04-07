@@ -120,7 +120,7 @@ export interface UpdateCustomerPayload {
     initialReading?: number;
     currentReading?: number;
   };
-
+  previousBalance?: number;
   balances?: {
     previousBalance?: number;
     expectedTotal?: number;

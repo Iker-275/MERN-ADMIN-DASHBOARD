@@ -1,39 +1,3 @@
-// import { useEffect, useState } from "react";
-// import { customerService } from "../api/CustomerApi";
-// import { Customer, CustomerFilters, Pagination } from "../types/CustomerType";
-
-// export function useCustomer(id?: string) {
-
-//   const [customer, setCustomer] = useState<Customer | null>(null);
-//   const [loading, setLoading] = useState(false);
-
-//   const fetchCustomer = async () => {
-
-//     if (!id) return;
-
-//     try {
-
-//       setLoading(true);
-
-//       const res = await customerService.getCustomer(id);
-
-//       setCustomer(res.data);
-
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchCustomer();
-//   }, [id]);
-
-//   return {
-//     customer,
-//     loading,
-//     refresh: fetchCustomer
-//   };
-// }
 
 import { useEffect, useState } from "react";
 import { customerService } from "../api/CustomerApi";
